@@ -31,7 +31,7 @@ public class App {
     static final int[] tamanhosTestePequeno = {          3,          6,          12,          24,          48 };
     static Random aleatorio = new Random(42);
     static long operacoes;
-    static double nanoToMilli = 1.0/1_000_000;
+    static double nanoToMilli = 1.0/1_000_000; // Padrão System Nano Time, por isso converte para milissegundos.
 
     /**
      * Código de teste 1. Este método...
@@ -41,6 +41,7 @@ public class App {
     static int codigo1(int[] vetor) {
         int resposta = 0;
         for (int i = 0; i < vetor.length; i += 2) {
+            operacoes++;
             resposta += vetor[i]%2;
         }
         return resposta;
@@ -55,6 +56,7 @@ public class App {
         int contador = 0;
         for (int k = (vetor.length - 1); k > 0; k /= 2) {
             for (int i = 0; i <= k; i++) {
+                operacoes++;
                 contador++;
             }
 
@@ -70,6 +72,7 @@ public class App {
         for (int i = 0; i < vetor.length - 1; i++) {
             int menor = i;
             for (int j = i + 1; j < vetor.length; j++) {
+                operacoes++;
                 if (vetor[j] < vetor[menor])
                     menor = j;
             }
@@ -85,6 +88,7 @@ public class App {
      * @return Um inteiro que significa...
      */
     static int codigo4(int n) {
+        operacoes++;
         if (n <= 2)
             return 1;
         else
@@ -105,6 +109,42 @@ public class App {
         
     }
     public static void main(String[] args) {
-        System.out.println(5 + 4);
+        for (int tamanhoVetor : tamanhosTesteGrande) {
+            System.out.println("Código 1");
+            int [] vetor = gerarVetor(tamanhoVetor);
+            operacoes = 0;
+            long inicio = System.nanoTime();
+            codigo1(vetor);
+            long fim = System.nanoTime();
+            double tempo = (fim - inicio) * nanoToMilli;
+            System.out.printf("Tamanho: %11d | Operações: %11d | Tempo: %.2f ms", tamanhoVetor, operacoes, tempo);
+            System.out.println();
+            System.out.println("==================================================================");
+        }
+        for (int tamanhoVetor : tamanhosTesteGrande) {
+            System.out.println("Código 2");
+            int [] vetor = gerarVetor(tamanhoVetor);
+            operacoes = 0;
+            long inicio = System.nanoTime();
+            codigo2(vetor);
+            long fim = System.nanoTime();
+            double tempo = (fim - inicio) * nanoToMilli;
+            System.out.printf("Tamanho: %11d | Operações: %11d | Tempo: %.2f ms", tamanhoVetor, operacoes, tempo);
+            System.out.println();
+            System.out.println("==================================================================");
+        }
+        for (int tamanhoVetor : tamanhosTesteMedio) {
+            System.out.println("Código 3");
+            int [] vetor = gerarVetor(tamanhoVetor);
+            operacoes = 0;
+            long inicio = System.nanoTime();
+            codigo3(vetor);
+            long fim = System.nanoTime();
+            double tempo = (fim - inicio) * nanoToMilli;
+            System.out.printf("Tamanho: %11d | Operações: %11d | Tempo: %.2f ms", tamanhoVetor, operacoes, tempo);
+            System.out.println();
+            System.out.println("==================================================================");
+        }
+        
     }
 }
